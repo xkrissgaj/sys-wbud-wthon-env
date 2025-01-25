@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  weather_requester:
+    build: .
+    environment:
+      - LOCATION=Wroclaw  # Można to nadpisać w przypadku potrzeby zmiany lokalizacji
+    volumes:
+      - .:/app  # Mapowanie bieżącego katalogu (na hoście) do katalogu roboczego w kontenerze  
+    restart: always  # Ustawiamy restart kontenera w razie błędu
+    container_name: weather_requester

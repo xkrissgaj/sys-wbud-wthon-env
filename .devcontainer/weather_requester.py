@@ -18,7 +18,8 @@ class WeatherRequester:
 
     def fetch_weather_data(self):
         """
-        Wysyła zapytanie do API pogodowego i zwraca odpowiedź w formacie JSON.
+       
+         Wysyła zapytanie do API pogodowego i zwraca odpowiedź w formacie JSON.
         """
         try:
             print(f"Fetching data from: {self.api_url}")  # Wypisuje URL zapytania na konsolę
