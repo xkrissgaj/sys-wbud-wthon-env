@@ -60,6 +60,6 @@ class WeatherRequester:
             time.sleep(30)
 
 if __name__ == "__main__":
-    location = os.getenv("LOCATION", "Delhi")
+    location = os.getenv("LOCATION", "arctic")
     requester = WeatherRequester(location)
     requester.run()
