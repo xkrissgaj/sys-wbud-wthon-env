@@ -3,6 +3,8 @@ version: '3.8'
 services:
   weather_requester:
     build: .
+    ports:
+      - "8080:8080"
     environment:
       - LOCATION=Wroclaw  # Można to nadpisać w przypadku potrzeby zmiany lokalizacji
     volumes:
