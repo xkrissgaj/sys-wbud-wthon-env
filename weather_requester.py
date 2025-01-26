@@ -4,16 +4,26 @@ import time                                         # Importuje bibliotekę do z
 import requests                                     # Importuje bibliotekę do wykonywania zapytań HTTP
 from datetime import datetime                       # Importuje bibliotekę do pracy z datami i czasami
 import pytz                                         # Importuje bibliotekę do pracy z czasami strefowymi
-import paho.mqtt.client as mqtt                     # Dodanie biblioteki MQTT
+from mqtt_publisher import MQTTPublisher            # Dodanie biblioteki MQTT
+
+# Pobieranie lokalizacji i danych MQTT ze zmiennych środowiskowych
+location = os.getenv("LOCATIONS", "Wroclaw")
+BROKER_ADDRESS = os.getenv("BROKER_ADDRESS", "167.172.164.168")
+BROKER_PORT = int(os.getenv("BROKER_PORT", 1883))
+MQTT_USER = os.getenv("MQTT_USER", "student")
+MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", "sys-wbud")
+STUDENT_ID = os.getenv("STUDENT_ID", "261356")
+TOPIC = f"{STUDENT_ID}/{location}"
 
 
 class WeatherRequester:
-    def __init__(self, location):
+    def __init__(self, location, mqtt_publisher):
         """
         Inicjalizuje obiekt WeatherRequester z nazwą lokalizacji oraz ustawieniami API.
         """
-        self.location = location                    # Lokalizacja dla zapytania pogodowego (np. 'Wroclaw')
-        
+        self.location = location                         # Lokalizacja dla zapytania pogodowego (np. 'Wroclaw')
+        self.mqtt_publisher = mqtt_publisher
+
         # Buduje URL do API pogodowego z dynamiczną nazwą lokalizacji i kluczem API
         self.api_url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{self.location}?unitGroup=metric&key=7M7Z4G9U5ZKS773AJFCY8WNVQ&contentType=json"
 
@@ -86,13 +96,17 @@ class WeatherRequester:
 
                 data_to_send = json.dumps(weather_data, indent=4)  
                 print(data_to_send)                                     # Wypisuje dane w formacie JSON
+
+                # Publikowanie wiadomości na MQTT
+                self.mqtt_publisher.publish_message(TOPIC, json.dumps(data_to_send))
+
             time.sleep(30)                                              # Czeka 30 sekund przed kolejnym zapytaniem
 
 
 # Główna część programu
 
 if __name__ == "__main__":
-    
+
     # Odczytuje nazwę lokalizacji z zmiennych środowiskowych (domyślnie 'Wroclaw')
     location = os.getenv("LOCATION", "Wroclaw")
     
