@@ -7,13 +7,13 @@ import pytz                                         # Importuje bibliotekę do p
 from mqtt_publisher import MQTTPublisher            # Importuje klasę do publikowania wiadomości MQTT
 
 # Pobieranie lokalizacji i danych MQTT ze zmiennych środowiskowych
-location = os.getenv("LOCATION", "Wroclaw")         # Domyślna lokalizacja: Wroclaw
-BROKER_ADDRESS = os.getenv("BROKER_ADDRESS", "test.mosquitto.org")  # Domyślny broker publiczny
-BROKER_PORT = int(os.getenv("BROKER_PORT", 1883))   # Port brokera MQTT (domyślnie 1883)
-MQTT_USER = os.getenv("MQTT_USER", None)            # Nazwa użytkownika (opcjonalna dla publicznego brokera)
-MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", None)    # Hasło (opcjonalne dla publicznego brokera)
-STUDENT_ID = os.getenv("STUDENT_ID", "261356")      # Unikalny identyfikator studenta
-TOPIC = f"{STUDENT_ID}/{location}"                  # Temat MQTT, np. "261356/Wroclaw"
+location = os.getenv("LOCATION", "Wroclaw")                                     # Domyślna lokalizacja: Wroclaw
+BROKER_ADDRESS = os.getenv("BROKER_ADDRESS", "test.mosquitto.org")              # Domyślny broker publiczny
+BROKER_PORT = int(os.getenv("BROKER_PORT", 1883))                               # Port brokera MQTT (domyślnie 1883)
+MQTT_USER = os.getenv("MQTT_USER", None)                                        # Nazwa użytkownika (opcjonalna dla publicznego brokera)
+MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", None)                                # Hasło (opcjonalne dla publicznego brokera)
+STUDENT_ID = os.getenv("STUDENT_ID", "213769")                                  # Unikalny identyfikator studenta
+TOPIC = f"{STUDENT_ID}/{location}"                                              # Temat MQTT, np. "261356/Wroclaw"
 
 # Inicjalizacja klienta MQTT
 mqtt_publisher = MQTTPublisher(
