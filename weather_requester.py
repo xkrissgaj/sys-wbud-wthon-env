@@ -4,16 +4,24 @@ import time                                         # Importuje bibliotekę do z
 import requests                                     # Importuje bibliotekę do wykonywania zapytań HTTP
 from datetime import datetime                       # Importuje bibliotekę do pracy z datami i czasami
 import pytz                                         # Importuje bibliotekę do pracy z czasami strefowymi
-from mqtt_publisher import MQTTPublisher            # Dodanie biblioteki MQTT
+from mqtt_publisher import MQTTPublisher            # Importuje klasę do publikowania wiadomości MQTT
 
 # Pobieranie lokalizacji i danych MQTT ze zmiennych środowiskowych
-location = os.getenv("LOCATIONS", "Wroclaw")
-BROKER_ADDRESS = os.getenv("BROKER_ADDRESS", "167.172.164.168")
-BROKER_PORT = int(os.getenv("BROKER_PORT", 1883))
-MQTT_USER = os.getenv("MQTT_USER", "student")
-MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", "sys-wbud")
-STUDENT_ID = os.getenv("STUDENT_ID", "261356")
-TOPIC = f"{STUDENT_ID}/{location}"
+location = os.getenv("LOCATION", "Wroclaw")         # Domyślna lokalizacja: Wroclaw
+BROKER_ADDRESS = os.getenv("BROKER_ADDRESS", "test.mosquitto.org")  # Domyślny broker publiczny
+BROKER_PORT = int(os.getenv("BROKER_PORT", 1883))   # Port brokera MQTT (domyślnie 1883)
+MQTT_USER = os.getenv("MQTT_USER", None)            # Nazwa użytkownika (opcjonalna dla publicznego brokera)
+MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", None)    # Hasło (opcjonalne dla publicznego brokera)
+STUDENT_ID = os.getenv("STUDENT_ID", "261356")      # Unikalny identyfikator studenta
+TOPIC = f"{STUDENT_ID}/{location}"                  # Temat MQTT, np. "261356/Wroclaw"
+
+# Inicjalizacja klienta MQTT
+mqtt_publisher = MQTTPublisher(
+    broker_address=BROKER_ADDRESS,
+    broker_port=BROKER_PORT,
+    username=MQTT_USER,
+    password=MQTT_PASSWORD,
+)
 
 
 class WeatherRequester:
@@ -29,16 +37,13 @@ class WeatherRequester:
 
     def fetch_weather_data(self):
         """
-         Wysyła zapytanie do API pogodowego i zwraca odpowiedź w formacie JSON.
+        Wysyła zapytanie do API pogodowego i zwraca odpowiedź w formacie JSON.
         """
         try:
             print(f"Fetching data from: {self.api_url}")                # Wypisuje URL zapytania na konsolę
             response = requests.get(self.api_url)                       # Wykonuje zapytanie GET do API pogodowego
             response.raise_for_status()                                 # Sprawdza, czy zapytanie zakończyło się sukcesem
             data = response.json()                                      # Parsuje odpowiedź w formacie JSON
-
-            # Drukujemy odpowiedź API, aby zobaczyć, jaka jest struktura ________ TESTY ________
-            # print(json.dumps(data, indent=4))  # Drukowanie całej odpowiedzi w formacie JSON
 
             return self.format_data(data)                               # Przekazuje dane do funkcji formatującej
         
@@ -51,10 +56,6 @@ class WeatherRequester:
         Formatuje odpowiedź z API do żądanej struktury JSON.
         """
         try:
-            
-            # Sprawdzamy, czy odpowiedź zawiera dane dla lokalizacji
-            location_data = api_response.get('locations', {}).get(self.location, {})
-
             # Wyciąganie danych z "currentConditions" dla pomiarów aktualnej pogody
             current_conditions = api_response.get('currentConditions', {})
 
@@ -76,16 +77,13 @@ class WeatherRequester:
 
             return formatted_data                                                                    # Zwracamy sformatowane dane
 
-        # obsługa błędów
-
         except (KeyError, IndexError) as e:                  # Obsługuje błędy w trakcie formatowania danych
             print(f"Error formatting data: {e}")             # Wypisuje komunikat o błędzie
             return None                                      # Zwraca None, jeśli nie udało się sformatować danych
 
-
     def run(self):
         """
-        Pętla, która co 30 sekund odpytuje API i wypisuje dane na konsolę.
+        Pętla, która co 30 sekund odpytuje API i publikuje dane na MQTT.
         """
         while True:
             print("Fetching weather data...")                        # Wypisuje komunikat informujący o pobieraniu danych
@@ -93,25 +91,19 @@ class WeatherRequester:
             if weather_data:                                         # Jeżeli dane zostały pomyślnie pobrane
 
                 # Przekształca dane do formatu JSON i wypisuje na konsolę
-
                 data_to_send = json.dumps(weather_data, indent=4)  
                 print(data_to_send)                                     # Wypisuje dane w formacie JSON
 
                 # Publikowanie wiadomości na MQTT
-                self.mqtt_publisher.publish_message(TOPIC, json.dumps(data_to_send))
+                self.mqtt_publisher.publish_message(TOPIC, data_to_send)
 
             time.sleep(30)                                              # Czeka 30 sekund przed kolejnym zapytaniem
 
 
 # Główna część programu
-
 if __name__ == "__main__":
-
-    # Odczytuje nazwę lokalizacji z zmiennych środowiskowych (domyślnie 'Wroclaw')
-    location = os.getenv("LOCATION", "Wroclaw")
-    
     # Tworzy instancję obiektu WeatherRequester z podaną lokalizacją
-    requester = WeatherRequester(location)
+    requester = WeatherRequester(location, mqtt_publisher)  
     
     # Uruchamia główną pętlę zapytań o dane pogodowe
     requester.run()
