@@ -1,0 +1,14 @@
+{
+    "location": "10890",
+    "location_name": "Wroc\u0142aw",
+    "timestamp": "2025-01-27T14:54:22.288763+00:00",
+    "lastUpdated_from_api": "2025-01-27T14:00:00+00:00",
+    "values": [
+        {
+            "no2": 10.3
+        },
+        {
+            "o3": 52.6
+        }
+    ]
+}

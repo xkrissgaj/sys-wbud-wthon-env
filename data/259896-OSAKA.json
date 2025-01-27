@@ -1,0 +1,36 @@
+{
+    "location": "1214851",
+    "lastUpdated_from_api": "2025-01-27T13:00:00+00:00",
+    "values": [
+        {
+            "id": 1214851,
+            "parameter": "so2",
+            "last_value": 0.001
+        },
+        {
+            "id": 1214851,
+            "parameter": "co",
+            "last_value": 0.5
+        },
+        {
+            "id": 1214851,
+            "parameter": "nox",
+            "last_value": 0.041
+        },
+        {
+            "id": 1214851,
+            "parameter": "pm25",
+            "last_value": 13.0
+        },
+        {
+            "id": 1214851,
+            "parameter": "no2",
+            "last_value": 0.034
+        },
+        {
+            "id": 1214851,
+            "parameter": "no",
+            "last_value": 0.007
+        }
+    ]
+}
