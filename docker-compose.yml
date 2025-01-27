@@ -1,12 +1,28 @@
-
 services:
   weather_requester:
-    build: .
-    ports:
-      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
-      - LOCATION=Wroclaw  # Można to nadpisać w przypadku potrzeby zmiany lokalizacji
+      - BROKER_ADDRESS=167.172.164.168
+      - BROKER_PORT=1883
+      - MQTT_USER=student
+      - MQTT_PASSWORD=sys-wbud
+      - STUDENT_ID=261356
+      - LOCATIONS=10890
+    restart: always
+
+  subscriber:
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
-      - .:/app  # Mapowanie bieżącego katalogu (na hoście) do katalogu roboczego w kontenerze  
-    restart: always  # Ustawiamy restart kontenera w razie błędu
-    container_name: weather_requester
+      - ./data:/app/data  # Wolumen współdzielący dane
+    environment:
+      - BROKER_ADDRESS=167.172.164.168
+      - BROKER_PORT=1883
+      - MQTT_USER=student
+      - MQTT_PASSWORD=sys-wbud
+      - DATA_FOLDER=/app/data
+    command: ["python", "mqtt_subscriber.py"]  # Poprawiona nazwa pliku
+    restart: always
