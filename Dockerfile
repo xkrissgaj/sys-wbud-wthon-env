@@ -12,8 +12,6 @@ COPY . /app
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install requests
-RUN pip install -r requirements.txt
 RUN pip install --upgrade paho-mqtt
 
 
@@ -21,9 +19,9 @@ RUN pip install --upgrade paho-mqtt
 
 
 # Copy application code
-COPY weather_requester.py .
-COPY mqtt_subscriber.py .
-COPY mqtt_publisher.py .
+#COPY weather_requester.py .
+#COPY mqtt_subscriber.py .
+#COPY mqtt_publisher.py .
 
 # Użytkownik bez uprawnień roota
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app

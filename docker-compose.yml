@@ -5,23 +5,27 @@ services:
     build:
       context: .  # Ścieżka do katalogu, w którym znajduje się Dockerfile
       dockerfile: Dockerfile  # Ścieżka do pliku Dockerfile
+    volumes:
+      - ./data:/app/data  # Wolumen współdzielący dane między kontenerem a hostem
     environment:
       - BROKER_ADDRESS=test.mosquitto.org  # Publiczny broker MQTT (można zmienić na lokalny)
       #BROKER_ADDRESS=167.172.164.168  # Adres IP lokalnego brokera MQTT
       - BROKER_PORT=1883  # Port używany przez MQTT (domyślnie 1883)
       #MQTT_USER=student  # Użytkownik (opcjonalny)
       #MQTT_PASSWORD=sys-wbud  # Hasło (opcjonalne)
-      - MQTT_USER=None  # Jeśli brak użytkownika, ustaw None
-      - MQTT_PASSWORD=None  # Jeśli brak hasła, ustaw None
+      # MQTT_USER=None  # Jeśli brak użytkownika, ustaw None
+      # MQTT_PASSWORD=None  # Jeśli brak hasła, ustaw None
       - STUDENT_ID=213796  # Unikalny identyfikator studenta
       - LOCATION=Wroclaw  # Przykładowa lokalizacja
-    command: ["python", "weather_requester.py"]  # Uruchamia skrypt weather_requester.py
+    #command: ["python", "weather_requester.py"]  # Uruchamia skrypt weather_requester.py
     restart: always  # Usługa będzie zawsze restartować się w przypadku błędu
     logging:
       driver: "json-file"  # Określa, że logi będą zapisywane w formacie JSON
       options:
         max-size: "10m"  # Maksymalny rozmiar pliku logu
         max-file: "3"  # Liczba plików logów do przechowywania
+    networks:
+      - mqtt_network
 
   subscriber:
     build:
@@ -35,8 +39,8 @@ services:
       - BROKER_PORT=1883  # Port używany przez MQTT (domyślnie 1883)
       #MQTT_USER=student  # Użytkownik (opcjonalny)
       #MQTT_PASSWORD=sys-wbud  # Hasło (opcjonalne)
-      - MQTT_USER=None  # Jeśli brak użytkownika, ustaw None
-      - MQTT_PASSWORD=None  # Jeśli brak hasła, ustaw None
+      # MQTT_USER=None  # Jeśli brak użytkownika, ustaw None
+      # MQTT_PASSWORD=None  # Jeśli brak hasła, ustaw None
       - DATA_FOLDER=/app/data  # Folder przechowujący dane w kontenerze
     command: ["python", "mqtt_subscriber.py"]  # Uruchamia skrypt mqtt_subscriber.py
     restart: always  # Usługa będzie zawsze restartować się w przypadku błędu
@@ -45,4 +49,24 @@ services:
       options:
         max-size: "10m"  # Maksymalny rozmiar pliku logu
         max-file: "3"  # Liczba plików logów do przechowywania
+    networks:
+      - mqtt_network
 
+  web_ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/app/data  # Wolumen współdzielący dane
+    ports:
+      - "5000:5000"       # Mapowanie portów dla Web UI
+    environment:
+      - DATA_FOLDER=/app/data
+    command: ["python", "web_ui.py"]
+    restart: always
+    networks:
+      - mqtt_network
+
+networks:
+  mqtt_network:
+    driver: bridge    

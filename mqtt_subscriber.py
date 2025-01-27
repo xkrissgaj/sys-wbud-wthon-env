@@ -6,8 +6,8 @@ import os
 location = os.getenv("LOCATION", "Wroclaw")
 BROKER_ADDRESS = os.getenv("BROKER_ADDRESS", "test.mosquitto.org")
 BROKER_PORT = int(os.getenv("BROKER_PORT", 1883))
-MQTT_USER = os.getenv("MQTT_USER", None)
-MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", None)
+MQTT_USER = os.getenv("MQTT_USER", )
+MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", )
 
 STUDENT_ID = os.getenv("STUDENT_ID", "213769")
 TOPIC = f"{STUDENT_ID}/{location}"
