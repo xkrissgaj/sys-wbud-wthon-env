@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dane z plików JSON</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            padding: 2rem;
+        }
+        .file-entry {
+            background-color: #ffffff;
+            margin: 1rem 0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            font-size: 1.7rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333333;
+        }
+        pre {
+            background-color: #f7f7f7;
+            padding: 1rem;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-family: 'Courier New', Courier, monospace;
+            color: #2e3d49;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .file-entry p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0077cc;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        .key {
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Dane z plików JSON</h1>
+</header>
+
+<div class="container">
+    {% if measurements %}
+        {% for measurement in measurements %}
+            <div class="file-entry">
+                <h2 class="highlight">{{ measurement.file }}</h2>
+                <p>Wczytane dane:</p>
+                <pre>
+                    {% for key, value in measurement.data.items() %}
+                        <span class="key">{{ key }}:</span> {{ value }}
+                    {% endfor %}
+                </pre>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Brak danych do wyświetlenia.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
