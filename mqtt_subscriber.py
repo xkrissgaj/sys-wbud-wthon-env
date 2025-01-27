@@ -29,6 +29,7 @@ def save_data_to_file(student_id, location, data):
 # Callback function when message is received
 def on_message(client, userdata, message):
     try:
+        print(f"Received message on topic {message.topic}: {message.payload.decode('utf-8')}")
         topic = message.topic
         payload = message.payload.decode("utf-8")
         data = json.loads(payload)
@@ -42,6 +43,15 @@ def on_message(client, userdata, message):
     except Exception as e:
         print(f"Error processing message: {e}")
     print(f"Received message: {message.payload.decode()} on topic {message.topic}")
+
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        print("Connected to broker successfully.")
+        client.subscribe(TOPIC_PATTERN)
+        print(f"Subscribed to topic pattern: {TOPIC_PATTERN}")
+    else:
+        print(f"Connection failed, return code {rc}")
+
 
 # Callback function when connection is successful
 def on_connect(client, userdata, flags, rc):

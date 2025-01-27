@@ -40,6 +40,8 @@ class MQTTPublisher:
         else:
             print(f"Połączenie z brokerem nie powiodło się. Kod błędu: {rc}")
 
+    
+
     def on_publish(self, client, userdata, mid):
         """
         Callback wywoływany po opublikowaniu wiadomości.
