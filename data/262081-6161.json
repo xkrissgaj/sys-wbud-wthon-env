@@ -1,15 +1,15 @@
 {
     "location": "Hornsgatan_Stockholm_Sweden",
-    "timestamp": "2025-01-27T15:00:00+01:00",
+    "timestamp": "2025-01-27T16:00:00+01:00",
     "values": [
         {
-            "measurement_name": "pm10 \u00b5g/m\u00b3: 12.4"
+            "measurement_name": "pm10 \u00b5g/m\u00b3: 11.9"
         },
         {
-            "measurement_name": "pm25 \u00b5g/m\u00b3: 6.7"
+            "measurement_name": "pm25 \u00b5g/m\u00b3: 6.5"
         },
         {
-            "measurement_name": "no2 \u00b5g/m\u00b3: 32.8"
+            "measurement_name": "no2 \u00b5g/m\u00b3: 31.4"
         },
         {
             "measurement_name": "o3 \u00b5g/m\u00b3: 40.4725"

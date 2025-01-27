@@ -15,7 +15,7 @@ services:
       - MQTT_PASSWORD=sys-wbud  # Hasło (opcjonalne)
       # MQTT_USER=None  # Jeśli brak użytkownika, ustaw None
       # MQTT_PASSWORD=None  # Jeśli brak hasła, ustaw None
-      - STUDENT_ID=213796  # Unikalny identyfikator studenta
+      - STUDENT_ID=250410  # Unikalny identyfikator studenta
       #- LOCATION=Wroclaw  # Przykładowa lokalizacja
     #command: ["python", "weather_requester.py"]  # Uruchamia skrypt weather_requester.py
     restart: always  # Usługa będzie zawsze restartować się w przypadku błędu
@@ -41,7 +41,7 @@ services:
       - MQTT_PASSWORD=sys-wbud  # Hasło (opcjonalne)
       # MQTT_USER=None  # Jeśli brak użytkownika, ustaw None
       # MQTT_PASSWORD=None  # Jeśli brak hasła, ustaw None
-      - STUDENT_ID=213796  # Unikalny identyfikator studenta
+      - STUDENT_ID=250410  # Unikalny identyfikator studenta
       # LOCATION=Wroclaw  # Przykładowa lokalizacja
       - DATA_FOLDER=/app/data  # Folder przechowujący dane w kontenerze
     command: ["python", "mqtt_subscriber.py"]  # Uruchamia skrypt mqtt_subscriber.py
