@@ -1,6 +1,19 @@
 import paho.mqtt.client as mqtt
 
+# Pobieranie danych z zmiennych środowiskowych
+#location = os.getenv("LOCATION", "Wroclaw")                                     # Domyślna lokalizacja: Wroclaw
+#BROKER_ADDRESS = os.getenv("BROKER_ADDRESS", "test.mosquitto.org")              # Domyślny broker publiczny
+##BROKER_PORT = int(os.getenv("BROKER_PORT", 1883))                               # Port brokera MQTT (domyślnie 1883)
+#MQTT_USER = os.getenv("MQTT_USER", None)                                        # Nazwa użytkownika (opcjonalna dla publicznego brokera)
+#MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", None)                                # Hasło (opcjonalne dla publicznego brokera)
+#STUDENT_ID = os.getenv("STUDENT_ID", "213769")                                  # Unikalny identyfikator studenta
+#TOPIC = f"{STUDENT_ID}/{location}"                                              # Temat MQTT, np. "261356/Wroclaw"
+#TOPIC_PATTERN = "#"  
+
+
 class MQTTPublisher:
+
+
     def __init__(self, broker_address, broker_port, username, password):
         # Tworzy nową instancję klienta MQTT
         self.client = mqtt.Client()

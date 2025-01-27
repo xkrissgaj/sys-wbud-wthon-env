@@ -3,6 +3,8 @@ import json
 import os
 
 # Fetch environment variables
+
+# BROKER_ADDRESS = os.getenv("BROKER_ADDRESS", "localhost")
 location = os.getenv("LOCATION", "Wroclaw")
 BROKER_ADDRESS = os.getenv("BROKER_ADDRESS", "test.mosquitto.org")
 BROKER_PORT = int(os.getenv("BROKER_PORT", 1883))
