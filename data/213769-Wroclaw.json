@@ -1,0 +1,15 @@
+{
+    "location": "Wroclaw",
+    "timestamp": "2025-01-27T03:31:59.258015+01:00",
+    "values": [
+        {
+            "temperature": 3.8
+        },
+        {
+            "precipitation": 0.0
+        },
+        {
+            "humidity": 86.2
+        }
+    ]
+}

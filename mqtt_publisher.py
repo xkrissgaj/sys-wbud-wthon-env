@@ -1,4 +1,4 @@
-import paho.mqtt.client as mqtt
+#import paho.mqtt.client as mqtt
 
 # Pobieranie danych z zmiennych środowiskowych
 #location = os.getenv("LOCATION", "Wroclaw")                                     # Domyślna lokalizacja: Wroclaw
@@ -11,11 +11,11 @@ import paho.mqtt.client as mqtt
 #TOPIC_PATTERN = "#"  
 
 
+import paho.mqtt.client as mqtt
+
 class MQTTPublisher:
-
-
     def __init__(self, broker_address, broker_port, username, password):
-        # Tworzy nową instancję klienta MQTT
+        # Tworzy nową instancję klienta MQTT z wersji 3 API
         self.client = mqtt.Client()
 
         # Ustawia dane uwierzytelniające użytkownika (nazwa i hasło)
@@ -26,10 +26,10 @@ class MQTTPublisher:
         self.client.on_publish = self.on_publish
 
         # Łączy klienta z brokerem MQTT na podanym adresie i porcie
-        self.client.connect(broker_address, broker_port)
+        self.client.connect(broker_address, broker_port, 60)
 
-        # Uruchamia pętlę MQTT w tle
-        self.client.loop_start()  
+        # Uruchamia pętlę MQTT w tle (background)
+        self.client.loop_start()
 
     def on_connect(self, client, userdata, flags, rc):
         """
