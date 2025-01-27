@@ -25,6 +25,10 @@ COPY weather_requester.py .
 COPY mqtt_subscriber.py .
 COPY mqtt_publisher.py .
 
+# Użytkownik bez uprawnień roota
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
+
 # Set environment variables
 #ENV LOCATION=Delhi
 #ENV MQTT_BROKER=localhost
